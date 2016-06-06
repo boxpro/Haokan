@@ -16,6 +16,8 @@ import com.devt.haokan.view.adapter.ContentAdapter;
 
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import butterknife.BindView;
 
@@ -24,7 +26,6 @@ public class MainActivity extends BaseActivity implements LocalCallBackInterface
     private static final String urlImg = "http://c.hiphotos.baidu.com/image/h%3D200/sign=7b991b465eee3d6d3dc680cb73176d41/96dda144ad3459829813ed730bf431adcaef84b1.jpg";
     private static final int  GETMESSAGE = 1;
     private ContentAdapter contentAdapter;
-
 
 
 
@@ -43,6 +44,11 @@ public class MainActivity extends BaseActivity implements LocalCallBackInterface
     @BindView(R.id.action_bar4)
     RelativeLayout relativeLayout_me;
 
+    BlankFragmentA blankFragmentA = null;
+    BlankFragmentB blankFragmentB = null;
+    BlankFragmentC blankFragmentC = null;
+    BlankFragmentD blankFragmentD = null;
+
     @Override
     protected int initLayout() {
         return R.layout.activity_main;
@@ -52,6 +58,15 @@ public class MainActivity extends BaseActivity implements LocalCallBackInterface
     protected void initExtendData(){
        requestTag = MainActivity.class.getSimpleName();
        fragmentManager = getFragmentManager();
+    }
+
+    /**
+     * 在activity将要推出的时候，调用该方法，一般在这个方法里保存变
+     * 处理 相关需要保存的数据
+     */
+    @Override
+    protected void saveAllData() {
+
     }
 
     @Override
@@ -134,29 +149,46 @@ public class MainActivity extends BaseActivity implements LocalCallBackInterface
         relativeLayout_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                switchFragment(new BlankFragmentA() ,R.id.main_content);
+                if (blankFragmentA ==null){//如果当前为NULL
+                    blankFragmentA = new BlankFragmentA();
+                    switchFragment(blankFragmentA,R.id.main_content);
+                }else{
+                    switchFragment(blankFragmentA ,R.id.main_content);
+                }
             }
         });
         relativeLayout_recommend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BlankFragmentB fragment = new BlankFragmentB();
-                switchFragment(fragment,R.id.main_content);
+                if (blankFragmentB ==null){//如果当前为NULL
+                    blankFragmentB = new BlankFragmentB();
+                    switchFragment(blankFragmentB,R.id.main_content);
+                }else{
+                    switchFragment(blankFragmentB ,R.id.main_content);
+                }
+
             }
         });
         relativeLayout_collect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BlankFragmentC fragment = new BlankFragmentC();
-                switchFragment(fragment,R.id.main_content);
+                if (blankFragmentC ==null){//如果当前为NULL
+                    blankFragmentC = new BlankFragmentC();
+                    switchFragment(blankFragmentC,R.id.main_content);
+                }else{
+                    switchFragment(blankFragmentC ,R.id.main_content);
+                }
             }
         });
         relativeLayout_me.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BlankFragmentD fragment = new BlankFragmentD();
-                switchFragment(fragment,R.id.main_content);
+                if (blankFragmentD ==null){//如果当前为NULL
+                    blankFragmentD = new BlankFragmentD();
+                    switchFragment(blankFragmentD,R.id.main_content);
+                }else{
+                    switchFragment(blankFragmentD ,R.id.main_content);
+                }
             }
         });
     }

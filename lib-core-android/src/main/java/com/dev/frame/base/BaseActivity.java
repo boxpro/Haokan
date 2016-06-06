@@ -1,8 +1,11 @@
 package com.dev.frame.base;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 
@@ -10,7 +13,9 @@ import com.dev.frame.http.Core;
 import com.dev.frame.http.HttpCallBack;
 import com.dev.frame.http.HttpMethod;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.ButterKnife;
 
@@ -30,6 +35,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected static  String requestTag ="defaut";
     protected static LocalCallBackInterface localCallBackInterface;
     protected static LocalDataInteface localDataInteface;
+    protected FragmentManager fragmentManager;
+    protected List<Fragment> fragmentList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void initEvent();
     protected abstract void initExtendData();
     protected abstract void initExtendInterface();
-
+    protected abstract void saveAllData();
     protected final void setInterface(LocalCallBackInterface localCallBack,LocalDataInteface localData){
         localCallBackInterface = localCallBack;
         localDataInteface = localData;
@@ -110,10 +117,33 @@ public abstract class BaseActivity extends AppCompatActivity {
        ButterKnife.bind(this);
     }
 
+    /**
+     * 在当前Activity 退出的时候，保存状态
+     * @param savedInstanceState
+     */
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        saveAllData();//保存需要保存的状态
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
         Core.getInstance(applicationContext).cancelPendingRequests(requestTag);
+    }
+
+    /**
+     * fragment切换控制
+     * @param fragment
+     * @param viewGroup
+     */
+    protected void switchFragment(Fragment fragment,int viewGroup){
+        FragmentTransaction fragmentTransaction =fragmentManager.beginTransaction();
+        if (!fragment.isAdded()){//判断当前fragment是否已经添加到管理器
+          fragmentTransaction.replace(viewGroup,fragment);
+        }
+        fragmentTransaction.commit();//提交事务
     }
 }
