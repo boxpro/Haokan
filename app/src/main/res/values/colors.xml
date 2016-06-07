@@ -3,6 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorButtonLine">#fdfcfd</color>
-    <color name="colorButtonLineFont">#0e0e0e</color>
+    <color name="colorButtonLine">#FF4081</color>
+    <color name="colorButtonLineFont">#ffffff</color>
+    <color name="colorFragmentA">#e62fea8d</color>
+    <color name="colorFragmentB">#ef2dab</color>
+    <color name="colorFragmentC">#f3116dde</color>
+    <color name="colorFragmentD">#fe950ed4</color>
 </resources>

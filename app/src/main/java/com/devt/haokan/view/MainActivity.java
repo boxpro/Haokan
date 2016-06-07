@@ -1,6 +1,7 @@
 package com.devt.haokan.view;
 
 import android.app.Fragment;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,7 @@ public class MainActivity extends BaseActivity implements LocalCallBackInterface
     private static final String urlImg = "http://c.hiphotos.baidu.com/image/h%3D200/sign=7b991b465eee3d6d3dc680cb73176d41/96dda144ad3459829813ed730bf431adcaef84b1.jpg";
     private static final int  GETMESSAGE = 1;
     private ContentAdapter contentAdapter;
+    protected int fragmentTag =0;
 
 
 
@@ -44,10 +46,10 @@ public class MainActivity extends BaseActivity implements LocalCallBackInterface
     @BindView(R.id.action_bar4)
     RelativeLayout relativeLayout_me;
 
-    BlankFragmentA blankFragmentA = null;
-    BlankFragmentB blankFragmentB = null;
-    BlankFragmentC blankFragmentC = null;
-    BlankFragmentD blankFragmentD = null;
+     BlankFragmentA blankFragmentA = null;
+     BlankFragmentB blankFragmentB = null;
+     BlankFragmentC blankFragmentC = null;
+     BlankFragmentD blankFragmentD = null;
 
     @Override
     protected int initLayout() {
@@ -60,14 +62,6 @@ public class MainActivity extends BaseActivity implements LocalCallBackInterface
        fragmentManager = getFragmentManager();
     }
 
-    /**
-     * 在activity将要推出的时候，调用该方法，一般在这个方法里保存变
-     * 处理 相关需要保存的数据
-     */
-    @Override
-    protected void saveAllData() {
-
-    }
 
     @Override
     protected void initExtendInterface() {
@@ -77,6 +71,7 @@ public class MainActivity extends BaseActivity implements LocalCallBackInterface
     @Override
     protected void initView() {
         actionBar = getSupportActionBar();
+
        // actionBar.hide();
 //        actionBar.setTitle("图片");
 //        actionBar.setSubtitle("超级图片");
@@ -89,7 +84,14 @@ public class MainActivity extends BaseActivity implements LocalCallBackInterface
     protected void initEvent() {
         //configRecycleView();
         configBottomTab();
+
     }
+
+    @Override
+    protected void initAfter() {
+        setDefaultFragment(fragmentTag);
+    }
+
 
 
     @Override
@@ -145,53 +147,106 @@ public class MainActivity extends BaseActivity implements LocalCallBackInterface
     /**
      * 配置底部按钮
      */
-    private void configBottomTab(){
+    private  void configBottomTab(){
         relativeLayout_home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (blankFragmentA ==null){//如果当前为NULL
-                    blankFragmentA = new BlankFragmentA();
-                    switchFragment(blankFragmentA,R.id.main_content);
-                }else{
-                    switchFragment(blankFragmentA ,R.id.main_content);
-                }
+
+                blankFragmentA();
             }
         });
         relativeLayout_recommend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (blankFragmentB ==null){//如果当前为NULL
-                    blankFragmentB = new BlankFragmentB();
-                    switchFragment(blankFragmentB,R.id.main_content);
-                }else{
-                    switchFragment(blankFragmentB ,R.id.main_content);
-                }
+                blankFragmentB();
 
             }
         });
         relativeLayout_collect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (blankFragmentC ==null){//如果当前为NULL
-                    blankFragmentC = new BlankFragmentC();
-                    switchFragment(blankFragmentC,R.id.main_content);
-                }else{
-                    switchFragment(blankFragmentC ,R.id.main_content);
-                }
+                blankFragmentC();
             }
         });
         relativeLayout_me.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (blankFragmentD ==null){//如果当前为NULL
-                    blankFragmentD = new BlankFragmentD();
-                    switchFragment(blankFragmentD,R.id.main_content);
-                }else{
-                    switchFragment(blankFragmentD ,R.id.main_content);
-                }
+                blankFragmentD();
             }
         });
     }
 
+   private void blankFragmentA() {
+        if (blankFragmentA ==null){//如果当前为NULL
+            blankFragmentA = new BlankFragmentA();
+            addFragment(blankFragmentA, R.id.main_content);
+        }else{
+            showFragment(blankFragmentA);
+        }
+    }
+    private void blankFragmentB() {
+        if (blankFragmentB ==null){//如果当前为NULL
+            blankFragmentB = new BlankFragmentB();
+            addFragment(blankFragmentB, R.id.main_content);
+        }else{
+            showFragment(blankFragmentB);
+        }
+    }
 
+    private void blankFragmentC() {
+        if (blankFragmentC ==null){//如果当前为NULL
+            blankFragmentC = new BlankFragmentC();
+            addFragment(blankFragmentC, R.id.main_content);
+        }else{
+            showFragment(blankFragmentC);
+        }
+    }
+    private void blankFragmentD() {
+        if (blankFragmentD ==null){//如果当前为NULL
+            blankFragmentD = new BlankFragmentD();
+            addFragment(blankFragmentD, R.id.main_content);
+        }else{
+            showFragment(blankFragmentD);
+        }
+    }
+
+
+
+
+
+    private void setDefaultFragment(int postion){
+        switch (postion){
+            case 0:
+               blankFragmentA();
+                break;
+            case 1:
+               blankFragmentB();
+                break;
+            case 2:
+               blankFragmentC();
+                break;
+            case 3:
+               blankFragmentD();
+                break;
+        }
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("postionTag",fragmentTag);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        fragmentTag = savedInstanceState.getInt("postionTag");
+        setDefaultFragment(fragmentTag);
+    }
+
+    @Override
+    public void onBackPressed() { //暂时屏蔽返回键
+        return;
+    }
 }

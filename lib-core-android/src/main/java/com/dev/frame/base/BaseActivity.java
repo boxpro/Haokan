@@ -38,6 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected FragmentManager fragmentManager;
     protected List<Fragment> fragmentList = new ArrayList<>();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +49,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initEvent();
         initExtendData();
         initExtendInterface();
+        initAfter();
 
     }
 
@@ -56,7 +58,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void initEvent();
     protected abstract void initExtendData();
     protected abstract void initExtendInterface();
-    protected abstract void saveAllData();
+    protected abstract void initAfter();
+
     protected final void setInterface(LocalCallBackInterface localCallBack,LocalDataInteface localData){
         localCallBackInterface = localCallBack;
         localDataInteface = localData;
@@ -117,15 +120,7 @@ public abstract class BaseActivity extends AppCompatActivity {
        ButterKnife.bind(this);
     }
 
-    /**
-     * 在当前Activity 退出的时候，保存状态
-     * @param savedInstanceState
-     */
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        saveAllData();//保存需要保存的状态
-    }
+
 
     @Override
     protected void onDestroy() {
@@ -134,16 +129,26 @@ public abstract class BaseActivity extends AppCompatActivity {
         Core.getInstance(applicationContext).cancelPendingRequests(requestTag);
     }
 
-    /**
-     * fragment切换控制
-     * @param fragment
-     * @param viewGroup
-     */
-    protected void switchFragment(Fragment fragment,int viewGroup){
-        FragmentTransaction fragmentTransaction =fragmentManager.beginTransaction();
-        if (!fragment.isAdded()){//判断当前fragment是否已经添加到管理器
-          fragmentTransaction.replace(viewGroup,fragment);
+    protected void addFragment(Fragment fragment,int viewGroup){
+     FragmentTransaction   fragmentTransaction =fragmentManager.beginTransaction();
+         if (!fragment.isAdded()){
+                fragmentList.add(fragment);
+                fragmentTransaction.add(viewGroup, fragment);
+         }
+        fragmentTransaction.commit();
+    }
+
+
+
+    protected void showFragment(Fragment currentfragment){
+        FragmentTransaction   fragmentTransaction =fragmentManager.beginTransaction();
+        for (Fragment fragment:fragmentList){
+            if (fragment != currentfragment){
+                fragmentTransaction.hide(fragment);
+            }else{
+                fragmentTransaction.show(fragment);
+            }
         }
-        fragmentTransaction.commit();//提交事务
+        fragmentTransaction.commit();
     }
 }
